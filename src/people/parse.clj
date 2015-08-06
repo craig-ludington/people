@@ -1,8 +1,7 @@
 (ns people.parse
-  (:require [clojure.data.csv :as csv]
-            [clojure.java.io :as io]))
+  (:require [clojure.data.csv :as csv]))
 
-(defn- infer-delimiter
+(defn infer-delimiter
   "Infer the input delimiter by scanning input for one of the known delimiters."
   [input]
   {:pre [(string? input)]}
@@ -10,7 +9,7 @@
         (re-find #","  input) \,
         :else \space))
 
-(defn- make-parser
+(defn make-parser
   "Return an appropriate parser for the given input string."
   [input]
   {:pre [(string? input)]}

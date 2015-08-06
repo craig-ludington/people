@@ -16,12 +16,9 @@
   {:pre [(string? input)]}
   (partial csv/read-csv input :separator (infer-delimiter input)))
 
-  {:pre [(string? input)]}  ;; java.io.Reader
-
 (defmulti parse
   "Parse input consisting of newline-terminated records with fields delimited by a pipe, comma, or space.
    Return a collection of records -- each record is a vector of strings, one per field."
-  [input]
   class)
 
 (defmethod parse String

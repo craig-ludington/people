@@ -1,7 +1,15 @@
 (ns people.parse
-  (:require [clj-time.coerce :as time]
+  (:require [clj-time.coerce :refer [from-string]]
+            [clj-time.format :as time :refer [formatter]]
             [clojure.tools.logging :as log]
             [people.tokenize :refer [tokenize]]))
+
+(def csv-date-formatter (formatter "MM/dd/yyyy"))
+
+(defn parse-date
+  [d]
+  (or (from-string d)
+      (time/parse csv-date-formatter d)))
 
 (defn valid?
   "Test that record, an array of tokens, is well-formed."
@@ -11,7 +19,7 @@
          last-name first-name gender favorite-color date-of-birth
          (every? string? record)
          (#{"F" "f" "M" "m"} gender)
-         (time/from-string date-of-birth))))
+         (parse-date date-of-birth))))
 
 (defn parse-record
   "Convert a valid record to a map of last-name, first-name, gender, favorite-color, and date-of-birth. Return nil for an invalid record."
@@ -22,7 +30,7 @@
        :first-name nf
        :gender g
        :favorite-color fc
-       :date-of-birth (time/from-string d)})
+       :date-of-birth (parse-date d)})
     (do (log/warn (str "parse-record: invalid record: " record)) false)))
 
 (defn parse

@@ -1,6 +1,7 @@
 (ns people.main
   (require [clojure.tools.cli :refer [parse-opts]]
            [clojure.string :as string]
+           [clojure.java.io :as io]
            [people.tokenize :refer [tokenize]]
            [people.parse :refer [parse]]
            [people.report :refer [print-report]])
@@ -47,9 +48,5 @@
     (cond errors             (exit 1 (error-msg errors))
           (empty? arguments) (exit 1 (usage summary))
           (:help options)    (exit 0 (usage summary))
-          :else (do (println "not implemented yet.")
-                    (println "options:" options)
-                    (println "arguments:" arguments)
-                    (println "errors:" errors)
-                    (println "summary:" summary)))))
+          :else              (println (print-report (-> (first arguments) io/reader tokenize parse) (:report options))))))
 

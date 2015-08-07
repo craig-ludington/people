@@ -33,7 +33,7 @@
   "Return a sorted CSV report of the given kind."
   [records kind]
   {:pre [(every? map? records) (#{1 2 3} kind)]}
-  (to-csv (condp kind =
+  (to-csv (condp = kind
             1 (gender-last-name-ascending records)
             2 (date-of-birth-ascending records)
             3 (last-name-descending records))))

@@ -25,7 +25,7 @@
   [input]
   (try (doall ((make-tokenizer input)))
        (catch java.lang.AssertionError e
-         (log/error (str "tokenize:" e))
+         (log/warn (str "tokenize:" e))
          [])))
 
 (defmethod tokenize java.io.Reader

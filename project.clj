@@ -12,7 +12,12 @@
                                                     com.sun.jdmk/jmxtools
                                                     com.sun.jmx/jmxri]]
                  [org.clojure/tools.logging "0.3.1"]]
-  :plugins [[lein-ring "0.8.13"]]
+  :plugins [[lein-ring "0.8.13"]
+            [lein-bin "0.3.4"]]
+  :main people.main
+  :bin {:name "people"
+        :bin-path "~/bin"
+        :bootclasspath true}
   :ring {:handler people.handler/app}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]

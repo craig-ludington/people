@@ -1,5 +1,6 @@
 (ns people.tokenize
-  (:require [clojure.data.csv :as csv]))
+  (:require [clojure.data.csv :as csv]
+            [clojure.tools.logging :as log]))
 
 (defn infer-delimiter
   "Infer the input delimiter by scanning input for one of the known delimiters."
@@ -22,7 +23,10 @@
 
 (defmethod tokenize String
   [input]
-  (doall ((make-tokenizer input))))
+  (try (doall ((make-tokenizer input)))
+       (catch java.lang.AssertionError e
+         (log/error (str "tokenize:" e))
+         [])))
 
 (defmethod tokenize java.io.Reader
   [input]

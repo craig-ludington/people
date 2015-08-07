@@ -1,5 +1,6 @@
 (ns people.parse
   (:require [clj-time.coerce :as time]
+            [clojure.tools.logging :as log]
             [people.tokenize :refer [tokenize]]))
 
 (defn valid?
@@ -15,13 +16,14 @@
 (defn parse-record
   "Convert a valid record to a map of last-name, first-name, gender, favorite-color, and date-of-birth. Return nil for an invalid record."
   [record]
-  (when (valid? record)
+  (if (valid? record)
     (let [[nl nf g fc d] record]
       {:last-name nl
        :first-name nf
        :gender g
        :favorite-color fc
-       :date-of-birth (time/from-string d)})))
+       :date-of-birth (time/from-string d)})
+    (do (log/warn (str "parse-record: invalid record: " record)) false)))
 
 (defn parse
   "Parse a collection of records (each is an array of 5 tokens) returning the set of valid records found.  Duplicates and invalid records are removed."

@@ -6,7 +6,12 @@
                  [compojure "1.3.1"]
                  [ring/ring-defaults "0.1.2"]
                  [org.clojure/data.csv "0.1.2"]
-                 [clj-time "0.10.0"]]
+                 [clj-time "0.10.0"]
+                 [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
+                                                    javax.jms/jms
+                                                    com.sun.jdmk/jmxtools
+                                                    com.sun.jmx/jmxri]]
+                 [org.clojure/tools.logging "0.3.1"]]
   :plugins [[lein-ring "0.8.13"]]
   :ring {:handler people.handler/app}
   :profiles

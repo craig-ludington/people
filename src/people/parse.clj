@@ -9,21 +9,21 @@
         (re-find #","  input) \,
         :else \space))
 
-(defn make-parser
-  "Return an appropriate parser for the given input string."
+(defn make-tokenizer
+  "Return an appropriate tokenizer for the given input string."
   [input]
   {:pre [(string? input)]}
   (partial csv/read-csv input :separator (infer-delimiter input)))
 
-(defmulti parse
-  "Parse input consisting of newline-terminated records with fields delimited by a pipe, comma, or space.
+(defmulti tokenize
+  "Tokenize input consisting of newline-terminated records with fields delimited by a pipe, comma, or space.
    Return a collection of records -- each record is a vector of strings, one per field."
   class)
 
-(defmethod parse String
+(defmethod tokenize String
   [input]
-  (doall ((make-parser input))))
+  (doall ((make-tokenizer input))))
 
-(defmethod parse java.io.Reader
+(defmethod tokenize java.io.Reader
   [input]
-  (parse (slurp input)))
+  (tokenize (slurp input)))

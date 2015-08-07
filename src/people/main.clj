@@ -2,7 +2,8 @@
   (require [clojure.tools.cli :refer [parse-opts]]
            [clojure.string :as string]
            [people.tokenize :refer [tokenize]]
-           [people.parse :refer [parse]])
+           [people.parse :refer [parse]]
+           [people.report :refer [print-report]])
   (:gen-class))
 
 (defn usage [options-summary]

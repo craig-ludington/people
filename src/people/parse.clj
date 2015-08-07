@@ -1,29 +1,29 @@
 (ns people.parse
-  (:require [clojure.data.csv :as csv]))
+  (:require [clj-time.coerce :as time]
+            [people.tokenize :refer [tokenize]]))
 
-(defn infer-delimiter
-  "Infer the input delimiter by scanning input for one of the known delimiters."
-  [input]
-  {:pre [(string? input)]}
-  (cond (re-find #"\|" input) \|
-        (re-find #","  input) \,
-        :else \space))
+(defn valid?
+  "Test that record, an array of tokens, is well-formed."
+  [record]
+  (let [[last-name first-name gender favorite-color date-of-birth] record]
+    (and (= 5 (count record))
+         last-name first-name gender favorite-color date-of-birth
+         (every? string? record)
+         (#{"F" "f" "M" "m"} gender)
+         (time/from-string date-of-birth))))
 
-(defn make-tokenizer
-  "Return an appropriate tokenizer for the given input string."
-  [input]
-  {:pre [(string? input)]}
-  (partial csv/read-csv input :separator (infer-delimiter input)))
+(defn parse-record
+  "Convert a valid record to a map of last-name, first-name, gender, favorite-color, and date-of-birth. Return nil for an invalid record."
+  [record]
+  (when (valid? record)
+    (let [[nl nf g fc d] record]
+      {:last-name nl
+       :first-name nf
+       :gender g
+       :favorite-color fc
+       :date-of-birth (time/from-string d)})))
 
-(defmulti tokenize
-  "Tokenize input consisting of newline-terminated records with fields delimited by a pipe, comma, or space.
-   Return a collection of records -- each record is a vector of strings, one per field."
-  class)
-
-(defmethod tokenize String
-  [input]
-  (doall ((make-tokenizer input))))
-
-(defmethod tokenize java.io.Reader
-  [input]
-  (tokenize (slurp input)))
+(defn parse
+  "Parse a collection of records (each is an array of 5 tokens) returning the set of valid records found.  Duplicates and invalid records are removed."
+  [records]
+  (set (filter identity (map parse-record records))))

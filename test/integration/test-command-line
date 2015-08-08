@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# $PWD must be top of the project (parent directory of test/)
+
+die() {
+      echo "$0: fatal: $@" 1>&2
+      exit 1
+}
+type -p people || die "Can't find people executable on \$PATH"
+
+input=test/data/sample.csv
+
+a=/tmp/a.$$
+b=/tmp/b.$$
+c=/tmp/c.$$
+
+echo -n "test the three types of report ... "
+people -r 1 $input > $a; cmp $a test/data/sample-output-report-1.csv || die "people -r 1 $input > $a"
+people -r 2 $input > $b; cmp $b test/data/sample-output-report-2.csv || die "people -r 2 $input > $b"
+people -r 3 $input > $c; cmp $c test/data/sample-output-report-3.csv || die "people -r 3 $input > $c"
+echo pass
+
+echo -n "test the other input delimiters (pipe and space) ... "
+sed 's/,/|/g' $input | people > $a; cmp $a test/data/sample-output-report-1.csv || die "pipe-delimited input failed"
+sed 's/,/ /g' $input | people > $b; cmp $b test/data/sample-output-report-1.csv || die "space-delimited input failed"
+echo pass
+
+echo -n "test that we can process our own output files ... "
+people $input > $a
+people $a > $b
+cmp $a $b || die "$a wasn't the same as $b"
+echo " pass"
+
+echo -n "test that we can process standard input ... "
+< $input people -r 1 > $c; cmp $a $c || die "people <reading standard input>"
+echo " pass"
+
+echo -n "test that we can process multiple files (with duplicate record elimination) ... "
+people -r 1 $input $input > $a; cmp $a test/data/sample-output-report-1.csv || die "people -r 1 $input > $a"
+echo " pass"

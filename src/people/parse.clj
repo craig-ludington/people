@@ -9,7 +9,10 @@
 (defn parse-date
   [d]
   (or (from-string d)
-      (time/parse csv-date-formatter d)))
+      (try (time/parse csv-date-formatter d)
+           (catch java.lang.IllegalArgumentException e
+             (log/warn (str "parse-date: Cannot parse " "\"" d "\"."))
+             nil))))
 
 (defn valid?
   "Test that record, an array of tokens, is well-formed."

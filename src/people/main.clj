@@ -27,7 +27,7 @@
         "  Each record has the following five fields:"
         "  LastName,FirstName,Gender,FavoriteColor,DateOfBirth"
         "    Gender: either \"M\" or \"F\""
-        "    DateOfBirth: a date such as \"2000-12-31\""
+        "    DateOfBirth: a date, e.g. \"2000-12-31\", or \"12/31/2000\"."
         ""
         "If no file argument is supplied, standard input is used instead."]
        (string/join \newline)))

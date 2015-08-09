@@ -1,18 +1,8 @@
 (ns people.parse
   (:require [clj-time.coerce :refer [from-string]]
-            [clj-time.format :as time :refer [formatter]]
             [clojure.tools.logging :as log]
-            [people.tokenize :refer [tokenize]]))
-
-(def csv-date-formatter (formatter "MM/dd/yyyy"))
-
-(defn parse-date
-  [d]
-  (or (from-string d)
-      (try (time/parse csv-date-formatter d)
-           (catch java.lang.IllegalArgumentException e
-             (log/warn (str "parse-date: Cannot parse " "\"" d "\"."))
-             nil))))
+            [people.tokenize :refer [tokenize]]
+            [people.date :refer [parse-date]]))
 
 (defn valid?
   "Test that record, an array of tokens, is well-formed."

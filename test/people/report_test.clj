@@ -3,7 +3,8 @@
             [clojure.java.io :as io]
             [clj-time.coerce :refer [from-string]]
             [people.report :refer :all]
-            [people.parse :refer [parse]]))
+            [people.parse :refer [parse]]
+            [people.date :refer [to-csv-date]]))
 
 (def records (parse [["Bow" "Juan" "M" "Red" "2001-01-01"]
                      ["Doe" "John" "M" "Blue" "2001-02-03"]

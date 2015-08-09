@@ -1,5 +1,6 @@
 (ns people.report
   (require [clojure.data.csv :as csv]
+           [people.date :refer [to-csv-date]]
            [clj-time.format :refer [formatter unparse]]))
 
 (defn gender-last-name-ascending
@@ -13,13 +14,6 @@
 (defn last-name-descending
   [records]
   (reverse (sort-by :last-name records)))
-
-(def csv-date-formatter (formatter "MM/dd/yyyy"))
-
-(defn to-csv-date
-  "Convert a date to a month/day/year string, e.g. \"12/31/2015\"."
-  [d]
-  (unparse csv-date-formatter d))
 
 (defn to-csv
   "Return a CSV formatted report from records."

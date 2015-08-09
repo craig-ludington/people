@@ -6,7 +6,7 @@
            [people.tokenize :refer [tokenize]]
            [people.parse :refer [parse]]
            [people.report :refer [print-report]]
-           [people.store :as store :refer [store fetch]])
+           [people.store :as store :refer [store]])
   (:gen-class))
 
 (defn usage [options-summary]
@@ -62,7 +62,7 @@
   (log/debug (str "print-report-from-files: files: " files " report-number: " report-number))
   (doall (map parse-and-store-from-file files))
   (log/debug (str "print-report-from-files: @store/data: " @store/data))
-  (println (print-report (fetch) report-number)))
+  (println (print-report report-number)))
 
 (defn -main [& args]
   (let [{:keys [options arguments errors summary]} (parse-opts args cli-options)]
@@ -71,5 +71,3 @@
           :else           (if (empty? arguments)
                             (print-report-from-stdin (:report options))
                             (print-report-from-files arguments (:report options))))))
-
-              

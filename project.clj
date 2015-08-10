@@ -13,7 +13,8 @@
                                                     com.sun.jdmk/jmxtools
                                                     com.sun.jmx/jmxri]]
                  [org.clojure/tools.logging "0.3.1"]
-                 [org.clojure/tools.cli "0.3.2"]]
+                 [org.clojure/tools.cli "0.3.2"]
+                 [org.clojure/data.json "0.2.6"]]
   :plugins [[lein-ring "0.8.13"]
             [lein-bin "0.3.4"]]
   :main people.main

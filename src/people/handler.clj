@@ -8,9 +8,9 @@
 
 (defroutes app-routes
   (POST "/records"           req (api/records req))
-  (GET  "/records/gender"    []  (api/gender))
-  (GET  "/records/birthdate" []  (api/birthdate))
-  (GET  "/records/name"      []  (api/name))
+  (GET  "/records/gender"    []  (api/by-gender))
+  (GET  "/records/birthdate" []  (api/by-birthdate))
+  (GET  "/records/name"      []  (api/by-name))
   (GET  "/"                  []  (redirect "/index.html"))
   (route/resources "/")
   (route/not-found "Not Found"))

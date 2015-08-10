@@ -6,9 +6,9 @@
             [people.parse :refer [parse]]
             [people.report :refer [json-report]]))
 
-(defn gender    [] (json-report 1))
-(defn birthdate [] (json-report 2))
-(defn name      [] (response (json-report 3)))
+(defn by-gender    [] (json-report 1))
+(defn by-birthdate [] (json-report 2))
+(defn by-name      [] (response (json-report 3)))
 
 (defn records
   [req]

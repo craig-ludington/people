@@ -47,3 +47,20 @@
       (is (= (:status response) 200))
       (let [m (json/read-str (slurp body) :key-fn keyword)]
         (is (= (map :last-name m) ["D" "C" "B" "A"]))))))
+
+(deftest test-post
+  (testing "post a record"
+    (let [{:keys [status body] :as response} (app (mock/request :post "/records" {:people-record "Doe,John,M,Blue,01/31/2015"}))]
+      (is (= (:status response) 200))
+      (let [val (json/read-str (slurp body) :key-fn keyword)]
+        (is (= val [{:last-name "Doe" :first-name "John" :gender "M" :favorite-color "Blue" :date-of-birth "2015-01-31T00:00:00.000Z"}])))))
+  (testing "post with no people-record parameter"
+    (let [{:keys [status body] :as response} (app (mock/request :post "/records" {:invalid-parameter "Doe,John,M,Blue,01/31/2015"}))]
+      (is (= (:status response) 400))
+      (let [val (json/read-str (slurp body) :key-fn keyword)]
+        (is (= val [{:status "error", :reason "Missing parameter: people-record"}])))))
+  (testing "post with ill-formatted record"
+    (let [{:keys [status body] :as response} (app (mock/request :post "/records" {:people-record "Doe,John,M,Blue,Not/A/Date"}))]
+      (is (= (:status response) 400))
+      (let [val (json/read-str (slurp body) :key-fn keyword)]
+        (is (= val [{:status "error" :reason "Can not parse parameter: people-record, value: \"Doe,John,M,Blue,Not/A/Date\""}]))))))
